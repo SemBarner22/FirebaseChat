@@ -1,5 +1,6 @@
 package com.sembarner.firebasechat;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,7 +28,9 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+
         send = findViewById(R.id.button);
+        Toast.makeText(ChatActivity.this, "1", Toast.LENGTH_LONG).show();
         displayChat();
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,13 +46,12 @@ public class ChatActivity extends AppCompatActivity {
     private void displayChat() {
         ListView listMessages = findViewById(R.id.listView);
         adapter = new FirebaseListAdapter<Message>(this, Message.class, R.layout.item, FirebaseDatabase.getInstance().getReference()) {
-
             @Override
             protected void populateView(View v, Message model, int position) {
                 TextView textMessage, author, timeMessage;
-                textMessage = findViewById(R.id.tvMessage);
-                author = findViewById(R.id.tvUser);
-                timeMessage = findViewById(R.id.tvTime);
+                textMessage = v.findViewById(R.id.tvMessage);
+                author = v.findViewById(R.id.tvUser);
+                timeMessage = v.findViewById(R.id.tvTime);
 
                 textMessage.setText(model.getTextmessage());
                 author.setText(model.getAuthor());
@@ -57,5 +60,11 @@ public class ChatActivity extends AppCompatActivity {
             }
         };
                 listMessages.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(ChatActivity.this, "2", Toast.LENGTH_LONG).show();
     }
 }
